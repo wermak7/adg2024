@@ -24,7 +24,7 @@ Wykłady:
 
 1. Wprowadzenie do Pythona
 
-# Materiały dodatkowe do ćwiczeń
+# Materiały dodatkowe
 
 - [Python Tutorial](https://docs.python.org/3/tutorial/)
 - [QGIS Python API](https://qgis.org/pyqgis/3.34/)
