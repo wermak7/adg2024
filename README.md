@@ -22,7 +22,7 @@ Wykłady:
 
 Ćwiczenia:
 
-1. Python
+1. Wprowadzenie do Pythona
 
 # Materiały dodatkowe do ćwiczeń
 
