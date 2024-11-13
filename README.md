@@ -1,5 +1,6 @@
 # Algorytmy danych geoprzestrzennych
-Kurs "Algorytmy danych geoprzestrzennych" UAM 2024
+To repozytorium zawiera materiały do kursu "Algorytmy danych geoprzestrzennych" prowadzonego
+na Uniwersytecie Adama Mickiewicza w semestrze zimowym w 2024 r.
 
 Algorytmy danych geoprzestrzennych to metody obliczeniowe służące do przetwarzania,
 analizowania oraz interpretowania danych przestrzennych i są powszechnie stosowane w
@@ -21,6 +22,7 @@ Wykłady:
 
 Ćwiczenia:
 
+1. Python
 
 # Materiały dodatkowe do ćwiczeń
 
