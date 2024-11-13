@@ -1,6 +1,20 @@
 # Algorytmy danych geoprzestrzennych
 Kurs "Algorytmy danych geoprzestrzennych" UAM 2024
 
+Algorytmy danych geoprzestrzennych to metody obliczeniowe służące do przetwarzania,
+analizowania oraz interpretowania danych przestrzennych i są powszechnie stosowane w
+systemach informacji geograficznej (*GIS*) do zadań takich jak analiza przestrzenna,
+zapytania przestrzenne, optymalizacja tras czy modelowanie środowiska. Do analizy mogą
+zostać wykorzystane zarówno dane wektorowe jak i rastrowe. Część praktyczna zajęć zostanie
+przeprowadzona w środowisku PyQGIS.
+
+PyQGIS to interfejs programistyczny aplikacji (*API*) do QGIS. Umożliwia on automatyzację
+zadań, rozszerzanie możliwości i tworzenie nowych wtyczek poprzez dostęp do funkcjonalności
+QGIS za pomocą języka programowania Python. PyQGIS umożliwia również integrację QGIS z
+innymi bibliotekami w środowisku Python, np. `NumPy`, `Pandas` czy `Matplotlib`.
+
+# Materiały do kursu
+
 Wykłady:
 
 1. [Wprowadzenie](https://kadyb.github.io/adg2024/wyklady/01_Wprowadzenie.html)
@@ -8,7 +22,7 @@ Wykłady:
 Ćwiczenia:
 
 
-# Materiał dodatkowe do ćwiczeń
+# Materiały dodatkowe do ćwiczeń
 
 - [Python Tutorial](https://docs.python.org/3/tutorial/)
 - [QGIS Python API](https://qgis.org/pyqgis/3.34/)
