@@ -14,6 +14,8 @@ zadań, rozszerzanie możliwości i tworzenie nowych wtyczek poprzez dostęp do 
 QGIS za pomocą języka programowania Python. PyQGIS umożliwia również integrację QGIS z
 innymi bibliotekami w środowisku Python, np. `NumPy`, `Pandas` czy `Matplotlib`.
 
+![](wyklady/_images/0_PyQGIS.png)
+
 # Materiały do kursu
 
 Wykłady:
