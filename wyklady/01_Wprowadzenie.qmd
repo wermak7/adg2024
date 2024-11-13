@@ -24,7 +24,7 @@ css: _style.css
 
 -   liczba godzin: 30
 -   część praktyczna w PyQGIS
--   zaliczenie: projekt końcowy
+-   zaliczenie: projekt końcowy + aktywność na zajęciach
 :::
 :::::
 
@@ -242,7 +242,7 @@ komputerach.
 ```
 ALGORYTM ZnajdzMaks(lista)
   maks = lista[1]
-  FOR dla kazdego elementu IN lista:
+  FOR kazdego elementu IN lista:
     IF element > maks THEN
       maks = element
   RETURN maks
@@ -472,7 +472,7 @@ do między innymi:
 - Wektor (*shapes*)
 - Symulacje
 - Analiza przestrzenna i geostatystyka
-- Niereguralna sieć trójkątów (*TIN*)
+- Nieregularna sieć trójkątów (*TIN*)
 - Dane tabelaryczne
 - Analiza terenu
 - Narzędzia (*tool chains*)
@@ -530,7 +530,7 @@ umożliwiając im komunikację i wymianę informacji.
 ::: {.fragment}
 **Geointerfejs** odnosi się do interfejsu, który zapewnia dostęp do
 danych i usług geoprzestrzennych, umożliwiając interakcje pomiędzy różnymi
-systemami geoprzestrzennymi za pomocą interfesju programowania aplikacji (*API*).
+systemami geoprzestrzennymi za pomocą interfejsu programowania aplikacji (*API*).
 :::
 
 ::: {.fragment}
