@@ -24,7 +24,7 @@ Wykłady:
 
 Ćwiczenia:
 
-1. [Wprowadzenie do Pythona](https://kadyb.github.io/adg2024/cwiczenia/01_Wprowadzenie.ipynb)
+1. [Wprowadzenie do Pythona](https://kadyb.github.io/adg2024/cwiczenia/01_Wprowadzenie.html)
 
 # Materiały dodatkowe
 
