@@ -25,6 +25,7 @@ Wykłady:
 Ćwiczenia:
 
 1. [Wprowadzenie do Pythona](https://kadyb.github.io/adg2024/cwiczenia/01_Python.html)
+2. [Wprowadzenie do PyQGIS](https://kadyb.github.io/adg2024/cwiczenia/02_PyQGIS.html)
 
 # Materiały dodatkowe
 
