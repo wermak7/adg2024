@@ -7,7 +7,7 @@ analizowania oraz interpretowania danych przestrzennych i są powszechnie stosow
 systemach informacji geograficznej (*GIS*) do zadań takich jak analiza przestrzenna,
 zapytania przestrzenne, optymalizacja tras czy modelowanie środowiska. Do analizy mogą
 zostać wykorzystane zarówno dane wektorowe jak i rastrowe. Część praktyczna zajęć zostanie
-przeprowadzona w środowisku PyQGIS (wymagana jest jedynie instalacja QGIS: https://qgis.org/download/).
+przeprowadzona w środowisku PyQGIS (wymagana jest jedynie instalacja QGIS: <https://qgis.org/download/>).
 
 PyQGIS to interfejs programistyczny aplikacji (*API*) do QGIS. Umożliwia on automatyzację
 zadań, rozszerzanie możliwości i tworzenie nowych wtyczek poprzez dostęp do funkcjonalności
@@ -37,4 +37,4 @@ Wykłady:
 
 # Kontakt 
 
-W razie pytań proszę o kontakt na krzysztof.dyba@amu.edu.pl
+W razie pytań proszę o kontakt na <krzysztof.dyba@amu.edu.pl>.
