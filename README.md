@@ -21,6 +21,7 @@ innymi bibliotekami w środowisku Python, np. `NumPy`, `Pandas` czy `Matplotlib`
 Wykłady:
 
 1. [Wprowadzenie](https://kadyb.github.io/adg2024/wyklady/01_Wprowadzenie.html)
+2. [Nakładanie warstw wektorowych](https://kadyb.github.io/adg2024/wyklady/02_Nakladanie_warstw.html)
 
 Ćwiczenia:
 
