@@ -34,14 +34,52 @@ sprawdzenie, w jaki sposób cechy z różnych warstw wpływają na siebie w prze
 
 ## Zastosowania
 
-- Analizy środowiskowe, np. analiza związeku pomiędzy siedliskami gatunków a
+- Analizy środowiskowe, np. analiza związku pomiędzy siedliskami gatunków a
 klasami pokrycia terenu
 - Zarządzanie kryzysowe, np. analiza obszarów zagrożonych powodzią uwzględniając
 dane o gęstości zaludnienia
 - Planowanie przestrzenne, np. określanie odpowiednich lokalizacji pod zabudowę
-uwzględniając obszory chronione i aktualną infrstrukturę
+uwzględniając obszary chronione i aktualną infrastrukturę
 - Analiza rynku, np. powiązanie lokalizacji klientów z danymi demograficznymi
 w celu ukierunkowania sprzedaży do określonej grupy
+
+## Przykład
+
+```{r}
+url = "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_1_states_provinces.zip"
+url = paste0("/vsizip/vsicurl/", url)
+query = "SELECT * from ne_10m_admin_1_states_provinces WHERE admin = 'Poland'"
+admin = vect(url, query = query)
+
+url = "https://naciscdn.org/naturalearth/10m/physical/ne_10m_rivers_lake_centerlines.zip"
+url = paste0("/vsizip/vsicurl/", url)
+rzeki = vect(url)
+```
+
+Wyodrębnienie tylko tych rzek, które przepływają przez wielkopolskę.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+plot(admin, mar = c(1.2, 0, 0, 0))
+plot(rzeki, col = "blue", add = TRUE)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+wynik = intersect(admin[admin$name_alt == "Wielkopolskie"], rzeki)
+plot(admin, mar = c(1.2, 0, 0, 0))
+plot(wynik, col = "blue", lwd = 3, add = TRUE)
+```
+:::
+
+::::
+
+```
+intersect(admin[admin$woj == "Wielkopolskie"], rzeki)
+```
 
 ## Algorytmy
 
@@ -275,6 +313,48 @@ plot(p2, lty = 2, add = TRUE)
 
 **Przykład:** Wyodrębnienie dróg, które znajdują się w granicach miasta.
 
+## Zwracane typy geometrii
+
+Wyjściowy typ geometrii przy docinaniu może być identyczny lub niższy.
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+```{r}
+p1 = vect("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))")
+p2 = vect("POLYGON ((0 10, 10 10, 10 20, 0 20, 0 10))")
+
+plot(p1, xlim = c(0, 10), ylim = c(0, 20), axes = FALSE, col = "blue",
+      mar = 0)
+plot(p2, col = "green", add = TRUE)
+```
+
+```{r}
+p3 = vect("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))")
+p4 = vect("POINT (5 5)")
+plot(p3, col = "green", axes = FALSE, mar = 0)
+plot(p4, add = TRUE, cex = 2)
+```
+:::
+
+::: {.column width="45%"}
+```{r}
+result = crop(p1, p2)
+plot(result, xlim = c(0, 10), ylim = c(0, 20), axes = FALSE, lwd = 4, mar = 0)
+plot(p1, lty = 2, add = TRUE)
+plot(p2, lty = 2, add = TRUE)
+```
+
+```{r}
+result = crop(p3, p4)
+plot(p3, lty = 2, axes = FALSE, mar = 0)
+plot(result, add = TRUE, cex = 2)
+```
+:::
+
+::::
+
 ## Srebrne poligony {.center style="text-align: center;"}
 
 ## Srebrne poligony
@@ -288,7 +368,7 @@ przycinania warstw wektorowych.
 
 ::: {.fragment}
 Najczęściej powstają na skutek niedopasowanych granic lub ograniczonej precyzji
-zapisu danch, co powoduje niewielkie przerwy pomiędzy obiektami.
+zapisu danych, co powoduje niewielkie przerwy pomiędzy obiektami.
 :::
 
 ## Przykład
@@ -319,7 +399,7 @@ plot(result, col = "red", axes = FALSE, mar = 0)
 
 ::::
 
-## Konsekewncje
+## Konsekwencje
 
 - Błędne obliczenia powierzchni i obwodów
 - Błędy topologiczne
@@ -331,4 +411,3 @@ plot(result, col = "red", axes = FALSE, mar = 0)
 2. Generalizacja danych wejściowych (uproszczenie geometrii)
 3. Ustawienia wartości tolerancji podczas operacji
 4. Post-processing (usuwanie poligonów na podstawie wartości progowej)
-
