@@ -29,6 +29,7 @@ Wykłady:
 1. [Wprowadzenie do Pythona](https://kadyb.github.io/adg2024/cwiczenia/01_Python.html)
 2. [Wprowadzenie do PyQGIS](https://kadyb.github.io/adg2024/cwiczenia/02_PyQGIS.html)
 3. [Przetwarzanie danych wektorowych](https://kadyb.github.io/adg2024/cwiczenia/03_Przetwarzanie_wektor.html)
+4. [Przetwarzanie danych rastrowych](https://kadyb.github.io/adg2024/cwiczenia/04_Przetwarzanie_raster.html)
 
 # Materiały dodatkowe
 
