@@ -1,0 +1,154 @@
+---
+title: "Algorytmy danych geoprzestrzennych"
+subtitle: "Relacje przestrzenne"
+author: "Krzysztof Dyba"
+format: 
+  revealjs:
+    slide-number: c/t
+    incremental: true
+    embed-resources: true
+css: _style.css
+---
+
+```{r}
+library("terra")
+```
+
+## Relacja przestrzenna
+
+Relacja przestrzenna określa sposób w jaki obiekty są ze sobą powiązane
+pod względem lokalizacji, odległości i interakcji w przestrzeni. Relacje te
+opisują wzajemne zależności pomiędzy obiektami.
+
+## Rodzaje relacji przestrzennych
+
+- Topologiczne -- opisują zależności pomiędzy obiektami, np. przyleganie
+do siebie dwóch działek katastralnych
+- Odległościowe -- opisują odległość między obiektami, np. odległość
+między dwoma miastami czy lokalizacja najbliższego szpitala
+- Wzorce i rozkład przestrzenny -- opisują rozmieszczenie obiektów w przestrzeni
+(tj. czy są skupione, równomiernie rozłożone lub rozproszone losowo), np.
+rozmieszczenie szkół w mieście
+
+## Zastosowania
+
+::: {style="font-size: 90%;"}
+- Zapytania przestrzenne -- wybieranie obiektów na podstawie ich relacji
+przestrzennej z innymi obiektami, np. wybierz wszystkie budynki, które
+znajdują się w strefie 1 km od centrum miasta
+- Analiza przestrzenna -- modelowanie zjawisk w kontekście geograficznym, np.
+wyznaczenie obszaru, który dotknięty jest przez negatywny czynnik (mapa
+zanieczyszczeń)
+- Analiza sieciowa -- optymalizacji tras, np. wyznaczenie najkrótszej lub
+najszybszej trasy
+- Planowanie przestrzenne -- określenie najlepszej lokalizacji dla nowego
+obiektu w oparciu o bliskość środków transportu, dane demograficzne czy
+istniejącą infrastrukturę
+:::
+
+## Predykaty
+
+**Predykat** (*predicate*) to:
+
+- wyrażenie opisujące pewne właściwości lub relacje
+- funkcja orzekająca o spełnieniu jakiegoś warunku (sprawdza go i zwraca
+prawdę bądź fałsz)
+
+\
+
+::: {.fragment}
+**Przykład:**
+Funkcja sprawdzająca czy liczba jest parzysta.
+:::
+
+## Predykaty przestrzenne
+
+**Predykaty przestrzenne** (geometryczne) to wyrażenia logiczne lub warunki
+opisujące relacje topologiczną między obiektami w przestrzeni.
+
+::: {.fragment}
+**Przykłady:**
+:::
+
+- Obiekt A przechodzi przez obiekt B
+- Obiekt A jest całkowicie zawarty w obiekcie B
+- Obiekt A całkowicie zawiera obiekt B
+- Obiekty A i B nie przecinają się ani nie są styczne
+
+## Obrazek
+
+## Predykaty przestrzenne
+
+- Zawiera (*Contains*)
+- Przechodzi (*Crosses*)
+- covers
+- coveredby
+- Rozłączny (*Disjoint*)
+- Równy (*Equals*)
+- Przecina (*Intersects*)
+- Pokrywa (*Overlaps*)
+- Dotyka (*Touches*)
+- Wewnątrz (*Within*)
+
+
+
+## Zawiera
+
+Jedna geometria całkowicie zawiera w sobie inną geometrię.
+
+```{r}
+relate()
+```
+
+
+Przykład: Powiat zawierający miasto.
+
+## Przechodzi
+
+Dwie geometrie mają częściowo wspólne punkty (nie wszystkie). Zwykle dotyczy
+przecięcia linii i poligonu lub dwóch linii.
+
+Przykład: Droga przebiegająca częściowo przez las i miasto.
+
+## Rozłączny
+
+Dwie geometrie nie mają ze sobą żadnego wspólnego punktu (nie przecinają się
+i nie stykają, tj. są rozdzielone).
+
+Przykład: Dwa budynki w różnych częściach miasta.
+
+## Równy
+
+Dwie geometrie są dokładnie tekie same (mają identyczne kształty i położenie).
+
+Przykład: Budynek zajmujący całą powierzchnię działki katastralnej.
+
+## Przecina
+
+Dwie geometrie mają co najmniej jeden punkt wspólny.
+
+Przykład: Droga przecinająca linię kolejową (przejazd kolejowy).
+
+## Pokrywa
+
+Dwie geometrie dzielą części swojego wnętrza, ale nie całość (częściowo się
+pokrywają).
+
+Przykład: Obszar parku narodowego pokrywający się częściwowo z obszarem lasu.
+
+## Dotyka
+
+Dwie geometrie mają wspólną granicę, ale nie pokrywają się (stykają się tylko
+na krawędzi).
+
+Przykład: Dwie sąsiadujące ze sobą działki katastralne.
+
+## Wewnątrz
+
+Jedna geometria jest całkowicie zawarta w innej geometrii.
+
+Przykład: Miasto znajdujące się w powiecie.
+
+## Model DE-9IM
+
+Dimensionally Extended 9 Intersection Model
