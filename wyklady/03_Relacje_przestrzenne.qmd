@@ -77,29 +77,32 @@ opisujące relacje topologiczną między obiektami w przestrzeni.
 
 ## Obrazek
 
+```{r}
+
+```
+
 ## Predykaty przestrzenne
 
+::: {style="font-size: 85%;"}
 - Zawiera (*Contains*)
 - Przechodzi (*Crosses*)
-- covers
-- coveredby
+- Pokrywa (*Covers*)
+- Pokryty przez (*Coveredby*)
 - Rozłączny (*Disjoint*)
 - Równy (*Equals*)
 - Przecina (*Intersects*)
-- Pokrywa (*Overlaps*)
+- Nakłada (*Overlaps*)
 - Dotyka (*Touches*)
 - Wewnątrz (*Within*)
-
-
+:::
 
 ## Zawiera
 
 Jedna geometria całkowicie zawiera w sobie inną geometrię.
 
 ```{r}
-relate()
+# relate()
 ```
-
 
 Przykład: Powiat zawierający miasto.
 
@@ -109,6 +112,20 @@ Dwie geometrie mają częściowo wspólne punkty (nie wszystkie). Zwykle dotyczy
 przecięcia linii i poligonu lub dwóch linii.
 
 Przykład: Droga przebiegająca częściowo przez las i miasto.
+
+## Pokrywa
+
+Jedna geometria całkowicie obejmuje drugą, ale nie oznacza to, że są identyczne
+(geometria pokrywająca drugą może być większa).
+
+Przykład: Powiat pokrywający miasto.
+
+## Pokryty przez
+
+Jedna geometria znajduje się całkowicie wewnątrz innej geometrii, ale większa
+geometria może wykraczać poza nią.
+
+Przykład: Miasto pokryte jest przez powiat.
 
 ## Rozłączny
 
@@ -129,10 +146,10 @@ Dwie geometrie mają co najmniej jeden punkt wspólny.
 
 Przykład: Droga przecinająca linię kolejową (przejazd kolejowy).
 
-## Pokrywa
+## Nakłada
 
 Dwie geometrie dzielą części swojego wnętrza, ale nie całość (częściowo się
-pokrywają).
+nakładają).
 
 Przykład: Obszar parku narodowego pokrywający się częściwowo z obszarem lasu.
 
@@ -149,6 +166,64 @@ Jedna geometria jest całkowicie zawarta w innej geometrii.
 
 Przykład: Miasto znajdujące się w powiecie.
 
+## Model *DE-9IM* {.center style="text-align: center;"}
+
 ## Model DE-9IM
 
-Dimensionally Extended 9 Intersection Model
+Model DE-9IM (*Dimensionally Extended 9 Intersection Model*) to model
+topologiczny stosowany w systemach informacji geograficznej do opisu
+relacji przestrzennych między dwoma obiektami geometrycznymi, takimi jak
+punkty, linie i poligony.
+
+Jest fundamentalnym konceptem w topologii przestrzennej.
+
+## Założenia
+
+Model DE-9IM testuje przecięcia między wnętrzem, granicą i zewnętrzem
+dwóch geometrii definiowanych w następujący sposób:
+
+- wnętrze (*Interior*) -- główna część obiektu (rdzeń)
+- granica (*Boundary*) -- krawędź obiektu
+- zewnętrze (*Exterior*) -- przestrzeń poza obiektem
+
+**Uwaga!** W przypadku linii, granicą jest punkt początkowy oraz końcowy linii.
+Natomiast punkt w ogóle nie posiada granic.
+
+## Założenia
+
+Model określa wymiar każdego możliwego przecięcia między tymi częściami w
+postaci macierzy 3 x 3, w której każda komórka reprezentuje przecięcie
+dwóch obiektów (A i B).
+
+|          |          |          |          |
+|:--------:|:--------:|:--------:|:--------:|
+|          | **I(B)** | **B(B)** | **E(B)** |
+| **I(A)** | I/I      | I/B      | I/E      |
+| **B(A)** | B/I      | B/B      | B/E      |
+| **E(A)** | E/I      | E/B      | E/E      |
+
+## Założenia
+
+::: {style="font-size: 90%;"}
+Komórki macierzy mogą przyjmować następujące wartości:
+
+- F -- przecięcie jest puste (fałsz, brak przecięcia)
+- T -- przecięcie nie jest puste (prawda)
+- `*` -- wymiar przecięcia nie ma znaczenia
+
+W przypadku wystąpienia przecięcia można uszczegółowić typ zwróconej geometrii:
+
+- 0 -- przecięcie jest punktem (0-wymiarowe)
+- 1 -- przecięcie jest linią (1-wymiarowe)
+- 2 -- przecięcie jest poligonem (2-wymiarowe)
+:::
+
+## Założenia
+
+Wynik jest zakodowany jako 9-znakowy łańcuch tekstu, gdzie każdy znak odpowiada
+komórce w macierzy, czytany od lewej do prawej, od góry do dołu. Na przykład:
+
+- `FF2FF1212`
+- `T*F**FFF*`
+
+## Przykład
