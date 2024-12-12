@@ -22,6 +22,7 @@ Wykłady:
 
 1. [Wprowadzenie](https://kadyb.github.io/adg2024/wyklady/01_Wprowadzenie.html)
 2. [Nakładanie warstw wektorowych](https://kadyb.github.io/adg2024/wyklady/02_Nakladanie_warstw.html)
+3. [Relacje przestrzenne](https://kadyb.github.io/adg2024/wyklady/03_Relacje_przestrzenne.html)
 
 Ćwiczenia:
 
