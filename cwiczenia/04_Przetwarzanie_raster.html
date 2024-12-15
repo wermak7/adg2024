@@ -7940,47 +7940,23 @@ Liczba komórek: 7268
 <span class="n">a</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="s2">"DEM@1"</span>
 
 <span class="n">calculator</span> <span class="o">=</span> <span class="n">QgsRasterCalculator</span><span class="p">(</span>
-    <span class="n">formulaString</span> <span class="o">=</span> <span class="s2">"DEM@1 * 3"</span><span class="p">,</span>
-    <span class="n">outputFile</span> <span class="o">=</span> <span class="s2">"output.tif"</span><span class="p">,</span>
-    <span class="n">outputFormat</span> <span class="o">=</span> <span class="s2">"GTiff"</span><span class="p">,</span>
-    <span class="n">outputExtent</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">extent</span><span class="p">(),</span>
-    <span class="c1"># outputCrs = raster.crs(),</span>
-    <span class="n">nOutputColumns</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span>
-    <span class="n">nOutputRows</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">height</span><span class="p">(),</span>
-    <span class="n">rasterEntries</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">],</span>
-    <span class="n">transformContext</span> <span class="o">=</span> <span class="n">QgsCoordinateTransformContext</span><span class="p">()</span>
+    <span class="s2">"'DEM@1' * 3"</span><span class="p">,</span>                   <span class="c1"># formulaString</span>
+    <span class="s2">"output.tif"</span><span class="p">,</span>                    <span class="c1"># outputFile</span>
+    <span class="s2">"GTiff"</span><span class="p">,</span>                         <span class="c1"># outputFormat</span>
+    <span class="n">raster</span><span class="o">.</span><span class="n">extent</span><span class="p">(),</span>                 <span class="c1"># outputExtent</span>
+    <span class="n">raster</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span>                    <span class="c1"># outputCrs</span>
+    <span class="n">raster</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span>                  <span class="c1"># nOutputColumns</span>
+    <span class="n">raster</span><span class="o">.</span><span class="n">height</span><span class="p">(),</span>                 <span class="c1"># nOutputRows</span>
+    <span class="p">[</span><span class="n">a</span><span class="p">],</span>                             <span class="c1"># rasterEntries</span>
+    <span class="n">QgsCoordinateTransformContext</span><span class="p">()</span>  <span class="c1"># transformContext</span>
 <span class="p">)</span>
 
-<span class="n">calculator</span><span class="o">.</span><span class="n">processCalculation</span><span class="p">()</span> <span class="c1">## dlaczego CRS nie jest prawidłowy?</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>0</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=fa6cad6c">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">QgsRasterLayer</span><span class="p">(</span><span class="s2">"output.tif"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">isValid</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">crs</span><span class="p">())</span>
-<span class="c1">#&gt; &lt;QgsCoordinateReferenceSystem: invalid&gt;</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="n">processCalculation</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Błąd zapisu"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span> 
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"OK"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7993,8 +7969,7 @@ Liczba komórek: 7268
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>True
-&lt;QgsCoordinateReferenceSystem: invalid&gt;
+<pre>OK
 </pre>
 </div>
 </div>
@@ -8044,7 +8019,7 @@ Liczba komórek: 7268
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">qgis.core</span> <span class="kn">import</span> <span class="n">QgsRasterHistogram</span>
@@ -8071,7 +8046,7 @@ Liczba komórek: 7268
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">qgis.core</span> <span class="kn">import</span> <span class="n">QgsHistogram</span>
@@ -8103,7 +8078,7 @@ Liczba komórek: 7268
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
