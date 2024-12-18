@@ -214,12 +214,11 @@ Przykład: Miasto znajdujące się w powiecie.
 Predykaty przestrzenne są implementowane w różnym oprogramowaniu geoinformacyjnym,
 w tym:
 
-- [GEOS](https://libgeos.org/doxygen/classgeos_1_1geom_1_1Geometry.html) (QGIS, terra, sf, shapely)
+- [GEOS](https://libgeos.org/doxygen/classgeos_1_1geom_1_1Geometry.html) (QGIS, Grass GIS, terra, sf, shapely)
 - [JTS Topology Suite](https://locationtech.github.io/jts/jts-features.html)
 - [Boost.Geometry](https://beta.boost.org/doc/libs/1_82_0/libs/geometry/doc/html/geometry/reference/spatial_indexes/group__predicates.html)
 - [S2](http://s2geometry.io/about/overview)
 - [ArcGIS](https://developers.arcgis.com/documentation/spatial-analysis-services/geometry-analysis/spatial-relationship/)
-- [Grass GIS](https://grass.osgeo.org/grass-stable/manuals/v.select.html)
 - [PostGIS](https://postgis.net/docs/using_postgis_query.html)
 
 ## Model *DE-9IM* {.center style="text-align: center;"}
