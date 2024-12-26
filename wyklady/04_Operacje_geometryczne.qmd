@@ -1,0 +1,275 @@
+---
+title: "Algorytmy danych geoprzestrzennych"
+subtitle: "Operacje geometryczne"
+author: "Krzysztof Dyba"
+format: 
+  revealjs:
+    slide-number: c/t
+    incremental: true
+    embed-resources: true
+css: _style.css
+---
+
+```{r}
+library("terra")
+set.seed(1)
+```
+
+
+## Operacje geometryczne
+
+**Operacje geometryczne** to zbiór technik stosowanych do przetwarzania i
+analizowania danych wektorowych. Umożliwiają one wykonywanie różnych zadań,
+takich jak tworzenie, modyfikowanie, łączenie, uproszczenie czy transformacje
+geometrii obiektów wektorowych.
+
+## Generowanie punktów
+
+```{r}
+n = 100
+zakres = c(xmin = 0, xmax = 100, ymin = 0, ymax = 100)
+x_wsp = runif(n, zakres["xmin"], zakres["xmax"])
+y_wsp = runif(n, zakres["ymin"], zakres["ymax"])
+mat = matrix(c(x_wsp, y_wsp), ncol = 2)
+```
+
+```{r}
+pts = vect(mat)
+plot(pts)
+```
+
+## Generowanie punktów
+
+**R**
+
+```r
+n = 100
+zakres = c(xmin = 0, xmax = 100, ymin = 0, ymax = 100)
+x_wsp = runif(n, zakres["xmin"], zakres["xmax"])
+y_wsp = runif(n, zakres["ymin"], zakres["ymax"])
+mat = matrix(c(x_wsp, y_wsp), ncol = 2)
+```
+
+**Python**
+
+```python
+import random
+n = 100
+zakres = {"xmin": 0, "xmax": 100, "ymin": 0, "ymax": 100}
+x_wsp = []
+y_wsp = []
+for _ in range(n):
+  x_wsp.append(random.uniform(zakres["xmin"], zakres["xmax"]))
+  y_wsp.append(random.uniform(zakres["ymin"], zakres["ymax"]))
+mat = list(zip(x_wsp, y_wsp))
+```
+
+## Generowanie punktów w poligonach
+
+1. Wygenerowanie punktu w zasięgu poligonu
+2. Sprawdzenie czy punkt znajduje się w poligonie
+
+::: {.fragment}
+```r
+n = 10
+licznik = 1
+lista = list()
+
+while (licznik <= n) {
+  x = runif(1, zakres["xmin"], zakres["xmax"])
+  y = runif(1, zakres["ymin"], zakres["ymax"])
+  pt = vect(cbind(x, y))
+  warunek = relate(pt, poly, relation = "within")
+  if (isTRUE(warunek)) {
+    lista = append(lista, pt)
+    licznik = licznik + 1
+  }
+}
+```
+:::
+
+## Generowanie punktów w poligonach
+
+```{r warning=FALSE}
+poly = vect("POLYGON ((30 10, 10 40, 40 40, 30 10))")
+smp = spatSample(as.polygons(ext(poly)), size = 19)
+idx = relate(smp, poly, relation = "within")
+```
+
+```{r}
+plot(poly, border = "blue")
+plot(smp[idx], col = "blue", add = TRUE)
+plot(smp[!idx], col = "grey", alpha = 0.7, add = TRUE)
+```
+
+## Tworzenie geometrii
+
+```{r}
+plot(pts, main = "Linia")
+idx = c(60, 66, 84, 57, 45, 31, 25)
+l = as.lines(pts[idx])
+plot(l, col = "red", lwd = 2, add = TRUE)
+text(46, 21, "P1")
+text(26, 80, "P7")
+```
+
+## Tworzenie geometrii
+
+```{r}
+plot(pts, main = "Poligon")
+idx = c(68, 59, 13, 8, 36, 37, 46, 68)
+poly = as.polygons(as.lines(pts[idx]))
+plot(poly, col = "red", border = NULL, add = TRUE)
+text(62, 25, "P1")
+text(71, 25, "P8")
+```
+
+## Tworzenie geometrii
+
+**Well-known text (WKT)**
+
+```
+POLYGON ((20 30, 80 30, 50 80, 20 30))
+LINESTRING (50 35, 50 15)
+```
+
+```{r}
+poly = vect("POLYGON ((40 30, 60 30, 50 60, 40 30))")
+l = vect("LINESTRING (50 35, 50 15)")
+plot(pts, col = NA, mar = c(1.5, 12, 2, 0))
+plot(poly, col = "darkgreen", border = NA, add = TRUE)
+plot(l, col = "brown", lwd = 4, add = TRUE)
+```
+
+## Generowanie siatki
+
+```{r}
+n = 10
+mat = matrix(rep(NA, times = 2 * n^2), ncol = 2)
+iter = 1
+for (x in seq(1, 100, by = 10)) {
+  for (y in seq(1, 100, by = 10)) {
+    mat[iter, ] = c(x, y)
+    iter = iter + 1
+  }
+}
+```
+
+```{r}
+pts_grid = vect(mat)
+plot(pts_grid, main = "Punkty")
+```
+
+## Generowanie siatki
+
+::::: columns
+::: {.column width="50%"}
+**R**
+
+```r
+n = 10
+mat = matrix(rep(NA, times = 2 * n^2),
+             ncol = 2)
+iter = 1
+
+for (x in seq(1, 100, by = 10)) {
+  for (y in seq(1, 100, by = 10)) {
+    mat[iter, ] = c(x, y)
+    iter = iter + 1
+  }
+}
+```
+:::
+
+::: {.column width="50%"}
+**Python**
+
+```python
+n = 10
+mat = []
+counter = 0
+
+for x in range(1, 101, 10):
+    for y in range(1, 101, 10):
+        mat.append([x, y])
+        counter += 1
+```
+:::
+:::::
+
+::: {.fragment}
+**1. Jakie są różnice między tymi dwoma blokami kodu?**
+:::
+::: {.fragment}
+**2. Alternatywne podejście w R?**
+:::
+
+## Generowanie siatki
+
+```{r}
+rast_grid = rast(pts_grid)
+poly_grid = as.polygons(rast_grid)
+plot(poly_grid, main = "Poligony")
+```
+
+## Zakres przestrzenny
+
+**Zakres przestrzenny** (minimalny prostokąt ograniczający, obwiednia) to
+prosta geometryczna reprezentacja zasięgu przestrzennego obiektów. Jest to
+najmniejszy prostokąt, który całkowicie pokrywa obiekty, a jego boki są
+równoległe do osi układu współrzędnych.
+
+::: {.nonincremental}
+Zakres przestrzenny jest definiowany przez cztery wartości:
+
+- Minimalna długość geograficzna (`X_min`).
+- Maksymalna długość geograficzna (`X_maks`).
+- Minimalna szerokość geograficzna (`Y_min`).
+- Maksymalna szerokość geograficzna (`Y_maks`).
+:::
+
+## Zakres przestrzenny
+
+```{r}
+plot(pts[50:65], xlim = c(0, 100), ylim = c(0, 100))
+bbox = ext(pts[50:65])
+plot(bbox, col = NA, border = "red", lwd = 2, lty = 2, add = TRUE)
+```
+
+```
+SpatExtent : 7.067, 91.287, 7.527, 89.509 (xmin, xmax, ymin, ymax)
+Powierzchnia: 6904 m^2
+```
+
+## Obrócony zakres przestrzenny
+
+**Obrócony zakres przestrzenny** (*minimal bounding rotated rectangle*) to
+najmniejszy prostokąt, który całkowicie pokrywa obiekty, przy czym prostokąt
+może się obracać, aby osiągnąć minimalny obszar.
+
+## Obrócony zakres przestrzenny
+
+```{r}
+plot(pts[50:65], xlim = c(0, 100), ylim = c(0, 100))
+r_bbox = minRect(pts[50:65])
+plot(r_bbox, col = NA, border = "red", lwd = 2, lty = 2, add = TRUE)
+```
+
+```
+Powierzchnia: 6856 m^2
+```
+
+## Minimalne koło ograniczające
+
+```{r}
+plot(pts[50:65], xlim = c(0, 100), ylim = c(0, 100))
+bc = minCircle(pts[50:65])
+plot(bc, col = NA, border = "red", lwd = 2, lty = 2, add = TRUE)
+```
+
+```
+Powierzchnia: 6910 m^2
+```
+
+## Otoczka wypukła
+
