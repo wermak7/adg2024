@@ -26,7 +26,7 @@ Wykłady:
 4. Operacje geometryczne
 
 *Aby pobrać prezentację w formacie PDF należy wcisnąć `E`, następnie `CTRL` + `P`
-i następnie zapisać ją jako PDF*
+i zapisać ją jako PDF.*
 
 Ćwiczenia:
 
