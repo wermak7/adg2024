@@ -18,9 +18,10 @@ set.seed(1)
 ## Operacje geometryczne
 
 **Operacje geometryczne** to zbiór technik stosowanych do przetwarzania i
-analizowania danych wektorowych. Umożliwiają one wykonywanie różnych zadań,
-takich jak tworzenie, modyfikowanie, łączenie, uproszczenie czy transformacje
-geometrii obiektów wektorowych.
+analizowania danych wektorowych.
+
+Umożliwiają one wykonywanie różnych zadań, takich jak tworzenie, modyfikowanie,
+łączenie, uproszczenie czy transformacje geometrii obiektów wektorowych.
 
 ## Generowanie punktów
 
@@ -128,16 +129,19 @@ text(71, 25, "P8")
 **Well-known text (WKT)**
 
 ```
-POLYGON ((20 30, 80 30, 50 80, 20 30))
-LINESTRING (50 35, 50 15)
+POLYGON ((40 30, 60 30, 50 55, 40 30))
+LINESTRING (50 30, 50 15)
+MULTIPOINT ((45 43), (55 43), (42 34), (58 34))
 ```
 
 ```{r}
-poly = vect("POLYGON ((40 30, 60 30, 50 60, 40 30))")
-l = vect("LINESTRING (50 35, 50 15)")
-plot(pts, col = NA, mar = c(1.5, 12, 2, 0))
-plot(poly, col = "darkgreen", border = NA, add = TRUE)
-plot(l, col = "brown", lwd = 4, add = TRUE)
+poly = vect("POLYGON ((40 30, 60 30, 50 55, 40 30))")
+l = vect("LINESTRING (50 30, 50 15)")
+p = vect("MULTIPOINT ((45 43), (55 43), (42 34), (58 34))")
+plot(poly, col = "darkgreen", border = NA, xlim = c(30, 70), ylim = c(15, 55),
+     mar = c(1.5, 12, 1, 0))
+plot(l, col = "brown", lwd = 8, add = TRUE)
+plot(p, col = "red", cex = 2, add = TRUE)
 ```
 
 ## Generowanie siatki
@@ -272,6 +276,28 @@ Powierzchnia: 6910 m^2
 
 ## Otoczka wypukła
 
+**Otoczka wypukła** to obiekt geometryczny, który reprezentuje najmniejszy
+wielokąt wypukły. Można to porównać do rozciągania gumy wokół gwoździ.
+
+::: {.nonincremental}
+::: {style="font-size: 85%;"}
+**Przykładowe algorytmy:**
+
+- Gift Wrapping (Jarvis March): $O(nh)$
+- Graham's Scan: $O(n \log n)$
+- QuickHull: $O(n \log n)$
+- Monotone Chain (Andrew's Algorithm): $O(n \log n)$
+- Chan's Algorithm: $O(n \log h)$
+:::
+:::
+
+```
+n - liczba punktów wejściowych
+h - liczba punktów na otoczce
+```
+
+## Otoczka wypukła
+
 ```{r}
 ch = convHull(pts)
 plot(pts)
@@ -364,7 +390,95 @@ plot(vor, col = rainbow(15))
 plot(pts, add = TRUE)
 ```
 
-## Transformacje
+## Transformacje geometryczne
+
+- Przesunięcie
+- Przeskalowanie
+- Transpozycja
+- Odbicie
+- Obrócenie
+
+## Przesunięcie
+
+```{r}
+poly = vect("POLYGON ((40 30, 60 30, 50 40, 40 30))")
+poly2 = shift(poly, dx = 10, dy = 5)
+
+plot(poly, lty = 2, xlim = c(40, 70), ylim = c(30, 45),
+     main = "Δx = 10  Δy = 5", mar = c(1.5, 3, 1.5, 0))
+plot(poly2, col = "lightblue", add = TRUE)
+```
+
+```
+                          x  y                   x  y
+                    [1,] 40 30             [1,] 50 35
+                    [2,] 60 30             [2,] 70 35
+                    [3,] 50 40    ---->    [3,] 60 45
+                    [4,] 40 30             [4,] 50 35
+```
+
+## Przeskalowanie
+
+```{r}
+poly = vect("POLYGON ((40 30, 60 30, 50 40, 40 30))")
+poly2 = rescale(poly, fx = 0.5, fy = 0.5)
+cent = centroids(as.polygons(ext(poly)))
+
+plot(poly, lty = 2, xlim = c(40, 60), ylim = c(30, 40),
+     main = "Δx = 0.5  Δy = 0.5")
+plot(poly2, col = "lightblue", add = TRUE)
+plot(cent, col = "red", add = TRUE)
+```
+
+```
+                  współczynnik * (wierzchołek - centroid) + centroid
+```
+
+## Transpozycja
+
+```{r}
+poly = vect("POLYGON ((40 30, 60 30, 50 40, 40 30))")
+poly2 = t(poly)
+
+plot(poly, lty = 2, xlim = c(30, 60), ylim = c(30, 60),
+     mar = c(1.5, 12, 0, 0))
+plot(poly2, col = "lightblue", add = TRUE)
+```
+
+```
+                              x  y                   x  y
+                        [1,] 40 30             [1,] 30 40
+                        [2,] 60 30             [2,] 30 60
+                        [3,] 50 40    ---->    [3,] 40 50
+                        [4,] 40 30             [4,] 30 40
+```
+
+## Odbicie
+
+```{r}
+poly = vect("POLYGON ((40 30, 60 30, 50 40, 40 30))")
+poly2 = flip(poly, direction = "vertical")
+
+plot(poly, lty = 2, xlim = c(40, 60), ylim = c(20, 40),
+     main = "Odbicie pionowe")
+plot(poly2, col = "lightblue", add = TRUE)
+```
+
+```
+            Odbicie poziome: (2a - x, y), gdzie a to linia wertykalna
+            Odbicie pionowe: (x, 2b - y), gdzie b to linia horyzontalna
+```
+
+## Obrócenie
+
+```{r}
+poly = vect("POLYGON ((40 30, 60 30, 50 40, 40 30))")
+poly2 = spin(poly, angle = 90, x0 = 50, y0 = 40)
+
+plot(poly, lty = 2, xlim = c(30, 60), ylim = c(30, 50),
+     main = "θ = 90°  x0 = 50  y0 = 40")
+plot(poly2, col = "lightblue", add = TRUE)
+```
 
 ## Inne operacje
 
