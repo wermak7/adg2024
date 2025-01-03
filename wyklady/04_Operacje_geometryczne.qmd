@@ -480,6 +480,8 @@ plot(poly, lty = 2, xlim = c(30, 60), ylim = c(30, 50),
 plot(poly2, col = "lightblue", add = TRUE)
 ```
 
+## Uproszczenie geometrii
+
 ## Inne operacje
 
 - Statystyki geometrii, np. długość, obwód, powierzchnia, liczba wierzchołków
