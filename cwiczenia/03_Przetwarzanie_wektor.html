@@ -7591,8 +7591,8 @@ a.anchor-link {
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>35
-5
-['fid', 'JPT_KOD_JE', 'JPT_NAZWA_', 'IIP_IDENTY', 'IIP_WERSJA']
+6
+['fid', 'JPT_KOD_JE', 'JPT_NAZWA_', 'IIP_IDENTY', 'IIP_WERSJA', 'pole_km2']
 </pre>
 </div>
 </div>
@@ -7652,11 +7652,11 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>[1, '3012', 'powiat krotoszyński', 'dc54ce6a-5272-45fc-a49c-824dbf170f2c', '2024-09-05T13:41:42+02:00']
-[2, '3002', 'powiat czarnkowsko-trzcianecki', 'b2e00ebb-412b-4ae8-9afc-fe68f65bb1ac', '2021-05-11T10:49:15+02:00']
-[3, '3009', 'powiat kolski', '06a4a975-dc89-4ac3-9d51-cf188532908a', '2012-09-27T08:59:03+02:00']
-[4, '3029', 'powiat wolsztyński', '6f988fb3-2b2c-467e-9d07-c512d9215c05', '2024-08-27T13:56:13+02:00']
-[5, '3026', 'powiat śremski', '2fc58bb6-d095-4f37-8f10-874797cb97fb', '2024-09-03T13:42:56+02:00']
+<pre>[1, '3012', 'powiat krotoszyński', 'dc54ce6a-5272-45fc-a49c-824dbf170f2c', '2024-09-05T13:41:42+02:00', 712.7437283077061]
+[2, '3002', 'powiat czarnkowsko-trzcianecki', 'b2e00ebb-412b-4ae8-9afc-fe68f65bb1ac', '2021-05-11T10:49:15+02:00', 1806.6288683868954]
+[3, '3009', 'powiat kolski', '06a4a975-dc89-4ac3-9d51-cf188532908a', '2012-09-27T08:59:03+02:00', 1009.273272845488]
+[4, '3029', 'powiat wolsztyński', '6f988fb3-2b2c-467e-9d07-c512d9215c05', '2024-08-27T13:56:13+02:00', 679.340479768619]
+[5, '3026', 'powiat śremski', '2fc58bb6-d095-4f37-8f10-874797cb97fb', '2024-09-03T13:42:56+02:00', 573.5639814826102]
 </pre>
 </div>
 </div>
@@ -8200,11 +8200,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="%C5%81%C4%85czenie-geometrii-obiekt%C3%B3w">Łączenie geometrii obiektów<a class="anchor-link" href="#%C5%81%C4%85czenie-geometrii-obiekt%C3%B3w">¶</a></h1><p>Można zrobić to na dwa sposoby:</p>
-<ol>
-<li>Pętla i <code>combine()</code></li>
-<li>Narzędzia processingu <code>processing.run("native:dissolve", parameters)</code></li>
-</ol>
+<h1 id="%C5%81%C4%85czenie-geometrii-obiekt%C3%B3w">Łączenie geometrii obiektów<a class="anchor-link" href="#%C5%81%C4%85czenie-geometrii-obiekt%C3%B3w">¶</a></h1>
 </div>
 </div>
 </div>
@@ -8254,7 +8250,6 @@ a.anchor-link {
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># stworzenie pustej warstwy w pamięci</span>
 <span class="n">buffer_layer</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="s2">"Polygon?crs="</span> <span class="o">+</span> <span class="n">vector</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span><span class="o">.</span><span class="n">authid</span><span class="p">(),</span> <span class="s2">"Bufor"</span><span class="p">,</span> <span class="s2">"memory"</span><span class="p">)</span>
-<span class="n">buffer_provider</span> <span class="o">=</span> <span class="n">buffer_layer</span><span class="o">.</span><span class="n">dataProvider</span><span class="p">()</span>
 
 <span class="c1"># odległość buforu w jednostkach warstwy (m)</span>
 <span class="n">buffer_distance</span> <span class="o">=</span> <span class="mf">10000.0</span> <span class="c1"># 10 km</span>
@@ -8269,7 +8264,7 @@ a.anchor-link {
     <span class="n">features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">buffer_feature</span><span class="p">)</span>
 
 <span class="c1"># dodanie buforów do warstwy wektorowej</span>
-<span class="n">buffer_provider</span><span class="o">.</span><span class="n">addFeatures</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+<span class="n">buffer_layer</span><span class="o">.</span><span class="n">dataProvider</span><span class="p">()</span><span class="o">.</span><span class="n">addFeatures</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
 <span class="n">buffer_layer</span><span class="o">.</span><span class="n">updateExtents</span><span class="p">()</span>
 
 <span class="c1"># wyświetlenie w QGIS</span>
@@ -8286,21 +8281,92 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Reprojekcja-warstwy">Reprojekcja warstwy<a class="anchor-link" href="#Reprojekcja-warstwy">¶</a></h1>
+<h1 id="Reprojekcja-warstwy">Reprojekcja warstwy<a class="anchor-link" href="#Reprojekcja-warstwy">¶</a></h1><ol>
+<li>Pętla i <code>QgsCoordinateTransform</code></li>
+<li>Zapisanie całej warstwy z nowym CRS</li>
+</ol>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=9ca9da37">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9ca9da37">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span> 
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">qgis.core</span> <span class="kn">import</span> <span class="n">QgsProject</span><span class="p">,</span> <span class="n">QgsCoordinateTransform</span><span class="p">,</span> <span class="n">QgsCoordinateReferenceSystem</span>
+
+<span class="n">source_crs</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span>
+<span class="n">target_crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem</span><span class="p">(</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="n">QgsCoordinateTransform</span><span class="p">(</span><span class="n">source_crs</span><span class="p">,</span> <span class="n">target_crs</span><span class="p">,</span> <span class="n">QgsProject</span><span class="o">.</span><span class="n">instance</span><span class="p">())</span>
+
+<span class="n">newlayer</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="s2">"Polygon?crs="</span> <span class="o">+</span> <span class="n">target_crs</span><span class="o">.</span><span class="n">authid</span><span class="p">(),</span> <span class="s2">"powiaty_4326"</span><span class="p">,</span> <span class="s2">"memory"</span><span class="p">)</span>
+<span class="n">newlayer</span><span class="o">.</span><span class="n">dataProvider</span><span class="p">()</span><span class="o">.</span><span class="n">addAttributes</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">fields</span><span class="p">())</span>
+<span class="n">newlayer</span><span class="o">.</span><span class="n">updateFields</span><span class="p">()</span>
+
+<span class="n">features</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">vector</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+    <span class="n">new_feature</span> <span class="o">=</span> <span class="n">feature</span>
+    <span class="n">geom</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+    <span class="n">geom</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span>
+    <span class="n">new_feature</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+    <span class="n">features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_feature</span><span class="p">)</span>
+    
+<span class="n">newlayer</span><span class="o">.</span><span class="n">dataProvider</span><span class="p">()</span><span class="o">.</span><span class="n">addFeatures</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">newlayer</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span><span class="o">.</span><span class="n">authid</span><span class="p">())</span>
+
+<span class="c1"># wyświetlenie w QGIS</span>
+<span class="c1"># QgsProject.instance().addMapLayer(newlayer)</span>
 </pre></div>
 </div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>EPSG:4326
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e27241a2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qgis.core</span> <span class="kn">import</span> <span class="n">QgsVectorFileWriter</span>
+
+<span class="n">source_crs</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span>
+<span class="n">target_crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem</span><span class="p">(</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
+<span class="n">context</span> <span class="o">=</span> <span class="n">QgsProject</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">transformContext</span><span class="p">()</span>
+
+<span class="n">output_path</span> <span class="o">=</span> <span class="s2">"powiaty_4326.gpkg"</span>
+<span class="n">options</span> <span class="o">=</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">SaveVectorOptions</span><span class="p">()</span>
+<span class="n">options</span><span class="o">.</span><span class="n">driverName</span> <span class="o">=</span> <span class="s2">"GPKG"</span>
+<span class="n">options</span><span class="o">.</span><span class="n">ct</span> <span class="o">=</span> <span class="n">QgsCoordinateTransform</span><span class="p">(</span><span class="n">source_crs</span><span class="p">,</span> <span class="n">target_crs</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">writeAsVectorFormatV3</span><span class="p">(</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">vector</span><span class="p">,</span>
+    <span class="n">fileName</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
+    <span class="n">transformContext</span> <span class="o">=</span> <span class="n">context</span><span class="p">,</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="n">writer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Błąd zapisu"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span> 
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"OK"</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
 </div>
