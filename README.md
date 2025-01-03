@@ -18,7 +18,7 @@ innymi bibliotekami w środowisku Python, np. `NumPy`, `Pandas` czy `Matplotlib`
 
 # Materiały do kursu
 
-Wykłady:
+**Wykłady:**
 
 1. [Wprowadzenie](https://kadyb.github.io/adg2024/wyklady/01_Wprowadzenie.html)
 2. [Nakładanie warstw wektorowych](https://kadyb.github.io/adg2024/wyklady/02_Nakladanie_warstw.html)
@@ -28,7 +28,7 @@ Wykłady:
 *Aby pobrać prezentację w formacie PDF należy wcisnąć `E`, następnie `CTRL` + `P`
 i zapisać ją jako PDF.*
 
-Ćwiczenia:
+**Ćwiczenia:**
 
 1. [Wprowadzenie do Pythona](https://kadyb.github.io/adg2024/cwiczenia/01_Python.html)
 2. [Wprowadzenie do PyQGIS](https://kadyb.github.io/adg2024/cwiczenia/02_PyQGIS.html)
