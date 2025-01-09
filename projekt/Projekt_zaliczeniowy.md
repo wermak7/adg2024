@@ -1,6 +1,6 @@
 Napisz funkcję, która umożliwi wczytanie danych wektorowych (geometria i atrybuty) z pliku
 tekstowego (.csv) i zapis do formatu przestrzennego (np. *geopackage*). Do wczytania danych
-wykorzystuj moduł [csv](https://docs.python.org/3/library/csv.html). Rozważ następujące aspekty:
+wykorzystaj moduł [csv](https://docs.python.org/3/library/csv.html). Rozważ następujące aspekty:
 
 1. **Geometria:**
     - Plik może zawierać dane punktowe o współrzędnych X, Y i opcjonalnie Z.
