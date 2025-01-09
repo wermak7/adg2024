@@ -12,7 +12,7 @@ wykorzystaj moduł [csv](https://docs.python.org/3/library/csv.html). Rozważ na
    kolumn. Jeśli nie, to należy nadać domyślne, np. "X1", "X2", …, "Xn".
 7. **Zapis do pliku wektorowego:**
     - Wybór docelowego formatu zapisu pliku przestrzennego.
-    - Określenia czy wejściowe kolumny z geometrią (tj. "X", "Y" lub "WKT") mają zostać zapisane
+    - Określenie czy wejściowe kolumny z geometrią (tj. "X", "Y" lub "WKT") mają zostać zapisane
       jako osobne atrybuty czy usunięte.
 
 Funkcja przykładowo może mieć następującą postać:
