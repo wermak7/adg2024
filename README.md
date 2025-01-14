@@ -35,6 +35,7 @@ i zapisać ją jako PDF.*
 3. [Przetwarzanie danych wektorowych](https://kadyb.github.io/adg2024/cwiczenia/03_Przetwarzanie_wektor.html)
 4. [Przetwarzanie danych rastrowych](https://kadyb.github.io/adg2024/cwiczenia/04_Przetwarzanie_raster.html)
 5. [Próbkowanie](https://kadyb.github.io/adg2024/cwiczenia/05_Probkowanie.html)
+6. [Obliczenia geodezyjne](https://kadyb.github.io/adg2024/cwiczenia/06_Obliczenia_geodezyjne.html)
 
 # Materiały dodatkowe
 
