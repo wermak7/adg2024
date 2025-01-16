@@ -1,0 +1,160 @@
+---
+title: "Algorytmy danych geoprzestrzennych"
+subtitle: "Obliczenia geodezyjne"
+author: "Krzysztof Dyba"
+format: 
+  revealjs:
+    slide-number: c/t
+    incremental: true
+    embed-resources: true
+css: _style.css
+---
+
+```{r}
+library("sf")
+```
+
+## Jaki kształt ma Ziemia? {style="text-align: center;"}
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/North_America_from_low_orbiting_satellite_Suomi_NPP.jpg/768px-North_America_from_low_orbiting_satellite_Suomi_NPP.jpg)
+
+::: {style="font-size: 60%;"}
+Blue Marble 2012, Suomi NPP
+:::
+
+## Geoida
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Geoid_undulation_to_scale.jpg/720px-Geoid_undulation_to_scale.jpg){fig-align="center"}
+
+::: {style="text-align: center;"}
+::: {style="font-size: 60%;"}
+[International Centre for Global Earth Models](https://icgem.gfz-potsdam.de)
+
+<https://essd.copernicus.org/articles/11/647/2019/>
+:::
+:::
+
+## Geoida
+
+**Geoida** to model kształtu Ziemi, który przedstawia złożoną, nieregularną
+powierzchnię, na którą siła grawitacji działa wszędzie prostopadle do
+powierzchni.
+
+Geoida nie ma matematycznie zdefiniowanego kształtu. Jej kształt wynika z
+różnic w ziemskim polu grawitacyjnym spowodowanymi zmianami w gęstości i
+rozkładzie masy Ziemi (np. występowanie gór i dolin). 
+
+Źródłem danych zazwyczaj są satelitarne pomiary grawitacyjne (np. misja GRACE).
+
+## Matematyczne reprezentacje
+
+::::: columns
+::: {.column width="60%"}
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Ellipsoide.svg/628px-Ellipsoide.svg.png)
+:::
+
+::: {.column width="40%"}
+**Sfera** (góra)
+
+**Elipsoida obrotowa** (lewo dół)
+
+**Elipsoida** (prawo dół)
+:::
+:::::
+
+::: {style="font-size: 50%;"}
+[Wikipedia](https://en.wikipedia.org/wiki/Ellipsoid)
+::: 
+
+## Elipsoida
+
+**Elipsoida** to obiekt geometryczny, w którym wszystkie płaskie przekroje są
+elipsami lub okręgami. Wszystkie trzy osie mogą mieć różne długości.
+
+$$
+\frac{x^2}{a^2} + \frac{y^2}{a^2} + \frac{z^2}{b^2} = 1
+$$
+
+## Elipsoida obrotowa (sferoida)
+
+**Elipsoida obrotowa** to obiekt geometryczny utworzony przez obrót elipsy
+wokół jednej z jej osi. Jeśli elipsa zostanie obrócona wokół mniejszej osi,
+to w rezultacie powstanie elipsoida spłaszczona, która przypomina kształem
+Ziemię.
+
+Jest to szczególny przypadek elipsoidy, w której dwie z trzech osi są równe.
+
+$$
+\frac{x^2 + y^2}{a^2} + \frac{z^2}{c^2} = 1
+$$
+
+::: {style="font-size: 75%;"}
+Jeśli:
+
+$c < a$ -- elipsoida spłaszczona
+
+$c > a$ -- elipsoida wydłużona
+:::
+
+## Sfera
+
+**Sfera** to idealnie okrągły obiekt geometryczny, w którym każdy punkt na
+powierzchni jest w równej odległości od środka. Jest to podstawowe i ogólne
+przybliżenie kształtu Ziemi, ponieważ nie uwzględnia spłaszczenia na biegunach.
+
+Jest to szczególny przypadek elipsoidy, w której wszystkie trzy osie mają równą
+długość.
+
+$$
+x^2 + y^2 + z^2 = r^2
+$$
+
+## Obrazowanie Ziemi na mapie
+
+**Podstawowy problem**
+
+Przedstawienie Ziemi na mapie obejmuje rzutowanie trójwymiarowego kształtu
+na dwuwymiarową powierzchnię. Ponieważ powierzchnia Ziemi jest zaokrąglona,
+proces ten wprowadza zniekształcenia związane ze kształtem, powierzchnią,
+odległością czy kierunkiem.
+
+\
+\
+
+::: {.fragment}
+::: {style="text-align: center;"}
+**Jakie jest rozwiązanie?**
+:::
+:::
+
+## Odwzorowanie kartograficzne
+
+**Odwzorowanie kartograficzne** to matematyczna transformacja szerokości i
+długości geograficznej z powierzchni sfery lub elipsoidy na płaszczyznę.
+
+::: {.nonincremental}
+**Podstawowe typy odwzorowań:**
+
+- Walcowe -- Ziemia rzutowana jest na cylinder, który następnie jest rozwijany
+tworząc płaską mapę.
+- Stożkowe -- Ziemia rzutowana jest na stożek, który jest rozwijany.
+- Azymutalne (płaszczyznowe) -- Ziemia rzutowana jest na płaską płaszczyznę,
+wyśrodkowaną w określonym punkcie.
+:::
+
+## Przykłady
+
+## Przykłady
+
+## Wnioski
+
+- Przedstawianie Ziemi na mapie to skomplikowany proces wymagający kompromisów.
+- Każde odwzorowanie ma swój własny zestaw zniekształceń.
+- Różne cele wymagają odmiennych podejść.
+- Odwzorowanie jest zawsze przybliżeniem.
+
+## Obliczenia {.center style="text-align: center;"}
+
+## Odległość
+
+## Powierzchnia
