@@ -12,6 +12,10 @@ css: _style.css
 
 ```{r}
 library("sf")
+
+url = "https://naciscdn.org/naturalearth/110m/cultural/ne_110m_admin_0_countries.zip"
+f = paste0("/vsizip/", "/vsicurl/", url)
+world = read_sf(f)
 ```
 
 ## Jaki kształt ma Ziemia? {style="text-align: center;"}
@@ -144,7 +148,26 @@ wyśrodkowaną w określonym punkcie.
 
 ## Przykłady
 
+```{r}
+world_mollweide = st_transform(st_geometry(world), crs = "+proj=moll")
+g = st_geometry(st_graticule(lat = c(-89.9, seq(-80, 80, 20), 89.9)))
+g = st_transform(g, crs = "+proj=moll")
+plot(g, col = "grey", main = "Odwzorowanie Mollweidego")
+plot(world_mollweide, add = TRUE)
+```
+
 ## Przykłady
+
+```{r}
+crs_laea = "+proj=laea +x_0=0 +y_0=0 +lon_0=10 +lat_0=40"
+world_laea = st_transform(st_geometry(world), crs = crs_laea)
+g = st_geometry(st_graticule(lat = c(-89.9, seq(-80, 80, 30), 89.9)))
+g = st_transform(g, crs = crs_laea)
+plot(g, col = "grey", main = "Odwzorowanie azymutalne Lamberta")
+plot(world_laea, add = TRUE)
+```
+
+## Elipsy Tissota
 
 ## Wnioski
 
@@ -157,4 +180,70 @@ wyśrodkowaną w określonym punkcie.
 
 ## Odległość
 
+```{r}
+pts = c(st_point(c(21, 52.2)), st_point(c(-74, 40.71)))
+pts = st_sfc(pts, crs = "EPSG:4326")
+pts = st_cast(pts, "POINT")
+```
+
+```{r}
+line = st_sfc(st_linestring(st_coordinates(pts)), crs = "EPSG:4326")
+great_circle = st_segmentize(line, dfMaxLength = 1000) # 1000 m
+```
+
+```{r}
+pts_equidist = st_transform(pts, "+proj=aeqd")
+# st_distance(pts_equidist) / 1000
+# 8115,859 km
+```
+
+```{r}
+plot(st_geometry(world), axes = TRUE)
+plot(pts, pch = 20, add = TRUE)
+plot(line, col = "red", lwd = 2, add = TRUE)
+text("8116 km", x = -35, y = 35, col = "red")
+plot(great_circle, col = "blue", lwd = 2, add = TRUE)
+text("6855 km", x = -30, y = 70, col = "blue")
+```
+
+::: {style="font-size: 80%;"}
+[Odległość euklidesowa]{style="color:red;"}: 8116 km \
+(Odwzorowanie azymutalne równoodległościowe)
+
+[Odległość sferyczna]{style="color:blue;"}: 6855 km
+:::
+
+## Odległość euklidesowa
+
+**Odległość euklidesowa** to miara odległości w linii prostej między dwoma
+punktami obliczana z następującego równania:
+
+$$
+d = \sqrt{(\Delta x)^2+(\Delta y)^2} = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}
+$$
+
+Wynika ona bezpośrednio z twierdzenia Pitagorasa o trójkątach prostokątnych:
+
+$$
+a^2 + b^2 = c^2
+$$
+
+gdzie $a$ i $b$ to długość przyprostokątnych, a $c$ to długość
+przeciwprostokątnej.
+
+## Odległość sferyczna
+
+**Odległość sferyczna** (ortodroma) to najkrótsza odległość między dwoma
+punktami na powierzchni sfery.
+
+Wzory:
+1. Równanie haversine
+2. Z długości cięciwy
+
+## Odległość elipsoidalna
+
+## Odległość powierzchniowa (z NMT)
+
 ## Powierzchnia
+
+## Precyzja współrzędnych
