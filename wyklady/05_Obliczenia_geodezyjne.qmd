@@ -84,7 +84,7 @@ $$
 
 **Elipsoida obrotowa** to obiekt geometryczny utworzony przez obrót elipsy
 wokół jednej z jej osi. Jeśli elipsa zostanie obrócona wokół mniejszej osi,
-to w rezultacie powstanie elipsoida spłaszczona, która przypomina kształem
+to w rezultacie powstanie elipsoida spłaszczona, która przypomina kształtem
 Ziemię.
 
 Jest to szczególny przypadek elipsoidy, w której dwie z trzech osi są równe.
