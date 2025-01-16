@@ -11,6 +11,7 @@ css: _style.css
 ---
 
 ```{r}
+#| message: false
 library("sf")
 
 url = "https://naciscdn.org/naturalearth/110m/cultural/ne_110m_admin_0_countries.zip"
@@ -146,7 +147,7 @@ tworząc płaską mapę.
 wyśrodkowaną w określonym punkcie.
 :::
 
-## Przykłady
+## Przykład
 
 ```{r}
 world_mollweide = st_transform(st_geometry(world), crs = "+proj=moll")
@@ -156,7 +157,7 @@ plot(g, col = "grey", main = "Odwzorowanie Mollweidego")
 plot(world_mollweide, add = TRUE)
 ```
 
-## Przykłady
+## Przykład
 
 ```{r}
 crs_laea = "+proj=laea +x_0=0 +y_0=0 +lon_0=10 +lat_0=40"
@@ -237,6 +238,7 @@ przeciwprostokątnej.
 punktami na powierzchni sfery.
 
 Wzory:
+
 1. Równanie haversine
 2. Z długości cięciwy
 
@@ -244,6 +246,18 @@ Wzory:
 
 ## Odległość powierzchniowa (z NMT)
 
+## Odległość powierzchniowa (z NMT)
+
 ## Powierzchnia
 
+## Rzeczywista wielkość komórek
+
 ## Precyzja współrzędnych
+
+::: {style="text-align: center;"}
+![](https://imgs.xkcd.com/comics/coordinate_precision.png)
+
+::: {style="font-size: 60%;"}
+<https://xkcd.com/2170>
+:::
+:::
