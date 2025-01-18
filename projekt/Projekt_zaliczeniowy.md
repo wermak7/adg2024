@@ -18,3 +18,7 @@ Napisz funkcję, która wykona następujące operacje przestrzenne:
 Wynikiem działania funkcji powinny być:
 1. Zapisana warstwa liniowa.
 2. Zaktualizowana warstwa `odbiorcy.gpkg`.
+
+### Termin
+
+Projekt zaliczeniowy proszę wysłać do 7 lutego (piątek) na mój adres e-mail: krzysztof.dyba@amu.edu.pl
