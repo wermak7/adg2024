@@ -2,6 +2,8 @@
 
 ## Analiza bliskości (wyszukiwanie najbliższego sąsiada)
 
+<img src="../wyklady/_images/2_polaczenia.png" width="500">
+
 Dane są dwie warstwy punktowe:
 
 1. `dostawcy.gpkg` (punkty główne).
