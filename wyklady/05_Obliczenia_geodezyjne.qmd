@@ -168,7 +168,41 @@ plot(g, col = "grey", main = "Odwzorowanie azymutalne Lamberta")
 plot(world_laea, add = TRUE)
 ```
 
-## Elipsy Tissota
+## Elipsa Tissota
+
+**Elipsa (wskaźnik) Tissota** to matematyczna koncepcja używana w kartografii do
+opisu zniekształcenia kształtów i rozmiarów, które występuje podczas odwzorowania
+zakrzywionej powierzchni Ziemi na mapie.
+
+Została opracowana przez francuskiego matematyka Nicolasa Auguste'a Tissota w
+XIX wieku.
+
+## Elipsa Tissota
+
+W idealnym odwzorowaniu wskaźnik byłby okręgiem, wskazującym, że kształt i
+rozmiar obszaru są zachowane. Jednakże, w rzeczywistości wskaźniki te przyjmują
+kształt elips o różnych rozmiarach i orientacjach, w szczególności:
+
+- jeśli oś wielka i mała elipsy nie są równe, to występuje zniekształcenie
+kształtu,
+- jeśli rozmiar elipsy różni się od oryginalnego okręgu, to występuje
+zniekształcenie skali,
+- jeśli osie elipsy nie są prostopadłe, to występuje zniekształcenie kątów
+(rotacja).
+
+## Elipsa Tissota
+
+::: {style="text-align: center;"}
+Odwzorowanie Mercatora
+:::
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Tissot_indicatrix_world_map_Mercator_proj.svg/772px-Tissot_indicatrix_world_map_Mercator_proj.svg.png){fig-align="center"}
+
+::: {style="text-align: center;"}
+::: {style="font-size: 60%;"}
+Eric Gaba ([Wikipedia](https://commons.wikimedia.org/wiki/File:Tissot_indicatrix_world_map_Mercator_proj.svg))
+:::
+:::
 
 ## Wnioski
 
@@ -176,6 +210,20 @@ plot(world_laea, add = TRUE)
 - Każde odwzorowanie ma swój własny zestaw zniekształceń.
 - Różne cele wymagają odmiennych podejść.
 - Odwzorowanie jest zawsze przybliżeniem.
+
+## Współrzędne geograficzne {.center style="text-align: center;"}
+
+## Współrzędne geograficzne
+
+## Precyzja współrzędnych
+
+::: {style="text-align: center;"}
+![](https://imgs.xkcd.com/comics/coordinate_precision.png)
+
+::: {style="font-size: 60%;"}
+<https://xkcd.com/2170>
+:::
+:::
 
 ## Obliczenia {.center style="text-align: center;"}
 
@@ -281,7 +329,7 @@ gdzie:
 
 $\Delta\sigma$ to kąt środkowy między punktami na sferze,
 
-$r$ to średnia długość promienia Ziemi.
+$r$ to średnia długość promienia Ziemi wynosząca 6371,009 km.
 
 ## Długość cięciwy
 
@@ -351,7 +399,8 @@ plot(line, lwd = 4, col = "red", add = TRUE)
 
 ::: {.nonincremental}
 1. Wyodrębnij wartości wysokości terenu wzdłuż linii.
-2. Oblicz odległość w trzech wymiarach (X, Y, Z) między kolejnymi punktami.
+2. Oblicz odległość euklidesową w trzech wymiarach (X, Y, Z) między kolejnymi
+punktami.
 :::
 
 ```r
@@ -409,16 +458,65 @@ plot(elev / 1000 ~ dist, type = "l", ylim = c(0, 2),
 
 **Odległość powierzchniowa:** 283 km
 
-## Powierzchnia
+## Powierzchnia poligonów
+
+```{r}
+sel = c("ALB", "AND", "AUT", "BEL", "BIH", "BLR", "BGR", "CHE", "CYP",
+        "CZE", "DEU", "DNK", "ESP", "EST", "FIN", "FRA", "GBR", "GRC",
+        "HRV", "HUN", "IRL", "ISL", "ITA", "LIE", "LTU", "LUX", "LVA",
+        "MCO", "MDA", "MKD", "MLT", "MNE", "NLD", "NOR", "POL", "PRT",
+        "ROU", "SMR", "SRB", "SVK", "SVN", "SWE", "TUR", "UKR", "VAT")
+europe = st_geometry(world[world$ADM0_A3 %in% sel, ])
+area_4326 = st_area(europe)
+area_4326 = units::set_units(area_4326, "km^2")
+
+# odwzorowanie azymutalne równopowierzchniowe
+europe_3035 = st_transform(europe, crs = "EPSG:3035")
+area_3035 = st_area(europe_3035)
+area_3035 = units::set_units(area_3035, "km^2")
+```
+
+```{r}
+plot(area_4326 ~ area_3035, pch = 20, cex = 2,
+     main = "Odwzorowanie azymutalne równopowierzchniowe",
+     xlab = "Powierzchnia planarna", ylab = "Powierzchnia sferyczna")
+abline(1, 1)
+```
+
+Każda kropka reprezentuje jeden kraj europejski.
+
+## Powierzchnia poligonów
+
+```{r}
+europe_mercator = st_transform(europe, crs = "EPSG:3857")
+area_mercator = st_area(europe_mercator)
+area_mercator = units::set_units(area_mercator, "km^2")
+```
+
+```{r}
+plot(area_4326 ~ area_mercator, pch = 20, cex = 2,
+     main = "Odwzorowanie sferyczne Mercatora (EPSG:3857)",
+     xlab = "Powierzchnia planarna", ylab = "Powierzchnia sferyczna")
+abline(1, 1)
+```
 
 ## Rzeczywista wielkość komórek
 
-## Precyzja współrzędnych
+```{r}
+r = rast(xmin = 134000, ymin = 137000, xmax = 865000, ymax = 693000,
+         resolution = 1000, crs = "EPSG:2180")
+cell_size = cellSize(r)
+```
 
-::: {style="text-align: center;"}
-![](https://imgs.xkcd.com/comics/coordinate_precision.png)
+```r
+r = rast(xmin = 134000, ymin = 137000, xmax = 865000, ymax = 693000,
+         resolution = 1000, crs = "EPSG:2180")
+res(r)[1] * res(r)[2]
+#> 1 000 000
+```
 
-::: {style="font-size: 60%;"}
-<https://xkcd.com/2170>
-:::
-:::
+```{r}
+plot(cell_size / prod(res(r)), main = "Iloraz powierzchni")
+```
+
+**Średnia powierzchnia komórek:** 1 000 307 m$^2$
