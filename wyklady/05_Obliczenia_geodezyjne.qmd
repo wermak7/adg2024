@@ -207,13 +207,132 @@ Eric Gaba ([Wikipedia](https://commons.wikimedia.org/wiki/File:Tissot_indicatrix
 ## Wnioski
 
 - Przedstawianie Ziemi na mapie to skomplikowany proces wymagający kompromisów.
-- Każde odwzorowanie ma swój własny zestaw zniekształceń.
+- Każde odwzorowanie ma swój własny zbiór zniekształceń.
 - Różne cele wymagają odmiennych podejść.
 - Odwzorowanie jest zawsze przybliżeniem.
 
 ## Współrzędne geograficzne {.center style="text-align: center;"}
 
 ## Współrzędne geograficzne
+
+**Współrzędne geograficzne** to zestaw dwóch liczb (szerokości i długości
+geograficznej) służący do określenia położenia punktu na powierzchni Ziemi.
+Mierzone są w stopniach, które są jednostkami miary kątowej.
+
+Szerokość geograficzna ($ϕ$) określa, jak daleko na północ (N) lub południe (S)
+znajduje się lokalizacja od równika. Zakres od 0° na równiku do 90° na
+biegunach.
+
+Długość geograficzna ($λ$) określa, jak daleko na wschód (E) lub zachód (W)
+znajduje się lokalizacja od południka zerowego. Zakres od 0° na południku
+zerowym do 180°.
+
+## Format zapisu
+
+::: {.nonincremental}
+Zazwyczaj podawane są w jednym z dwóch formatów:
+
+1. Stopnie (°), minuty (') i sekundy (''). Jeden stopień podzielony jest na 60
+minut, a jedna minuta na 60 sekund. Przykładowo: 52°17'34" N, 16°44'08" E.
+2. Stopnie dziesiętne. Przykładowo: 52,2927° N, 16,7355° E.
+:::
+
+**Nie ma jednoznacznej reguły odnośnie kolejności zapisu szerokości i długości
+geograficznej. W zależności od standardu mogą być różne!**
+
+## Konwersja
+
+**Konwersja stopni, minut i sekund na stopnie dziesiętne:**
+
+$$
+\text{Stopnie dziesiętne} = \text{Stopnie} + \frac{\text{Minuty}}{60} + \frac{\text{Sekundy}}{3600}
+$$
+
+**Konwersja stopni dziesiętnych na stopnie, minuty i sekundy:**
+
+$$
+\text{Stopnie} = \text{int}(\text{Stopnie dziesiętne})
+$$
+
+$$
+\text{Minuty} = \text{int}\left((\text{Stopnie dziesiętne} - \text{Stopnie}) \times 60\right)
+$$
+
+$$
+\text{Sekundy} = \left((\text{Stopnie dziesiętne} - \text{Stopnie}) \times 60 - \text{Minuty}\right) \times 60
+$$
+
+## Implementacja
+
+```{r}
+#| echo: true
+decimal_to_dms = function(decimal_degrees, is_lat) {
+  if (isTRUE(is_lat)) {
+    if (decimal_degrees >= 0) direction = "N"
+    else direction = "S" }
+  else {
+    if (decimal_degrees >= 0) direction = "E"
+    else direction = "W" }
+    
+  decimal_degrees = abs(decimal_degrees)
+  degrees = as.integer(decimal_degrees)
+  minutes = as.integer((decimal_degrees - degrees) * 60)
+  seconds = ((decimal_degrees - degrees) * 60 - minutes) * 60
+  seconds = round(seconds)
+  result = paste0(degrees, "°", minutes, "'", seconds, "''", " ", direction)
+  return(result)
+}
+```
+
+```{r}
+# decimal_to_dms(52.2927, is_lat = TRUE)
+#> [1] "52°17'34'' N"
+# decimal_to_dms(16.7355, is_lat = FALSE)
+#> [1] "16°44'8'' E"
+```
+
+```
+decimal_to_dms(52.2927, is_lat = TRUE)
+#> "52°17'34'' N"
+decimal_to_dms(16.7355, is_lat = FALSE)
+#> "16°44'8'' E"
+```
+
+## Implementacja
+
+```{r}
+#| echo: true
+dms_to_decimal = function(dms_string) {
+  dms_string = gsub("°", " ", dms_string)
+  dms_string = gsub("'", " ", dms_string)
+  parts = unlist(strsplit(dms_string, " "))
+  parts = parts[parts != ""]
+  
+  degrees = as.numeric(parts[1])
+  minutes = as.numeric(parts[2])
+  seconds = as.numeric(parts[3])
+  direction = parts[4]
+  
+  decimal = degrees + (minutes / 60) + (seconds / 3600)
+  decimal = round(decimal, 4)
+  if (direction %in% c("S", "W")) decimal = -decimal
+  return(decimal)
+}
+```
+
+```{r}
+# dms_to_decimal("52°17'34'' N")
+#> 52.2928
+# dms_to_decimal("16°44'08'' E")
+#> 16.7356
+```
+
+```
+dms_to_decimal("52°17'34'' N")
+#> 52.2928
+dms_to_decimal("16°44'08'' E")
+#> 16.7356
+```
 
 ## Precyzja współrzędnych
 
@@ -261,6 +380,13 @@ text("6855 km", x = -30, y = 70, col = "blue")
 
 [Odległość sferyczna]{style="color:blue;"}: 6855 km
 :::
+
+## Rodzaje odległości
+
+1. Odległość euklidesowa
+2. Odległość sferyczna
+3. Odległość elipsoidalna
+4. Odległość powierzchniowa
 
 ## Odległość euklidesowa
 
@@ -378,8 +504,8 @@ Karneya (2013 r.) uważany za najdokładniejszą metodę.
 ::: {style="font-size: 85%;"}
 **Odległość powierzchniowa** to rzeczywista odległość mierzona wzdłuż
 powierzchni terenu, uwzględniająca zmiany wysokości i nierówności powierzchni.
-Inaczej nazywana jest pomiarem 3D (topograficznym). Do wyliczenia niezbędny
-jest numeryczny model terenu.
+Inaczej nazywana jest pomiarem trójwymiarowym (X, Y, Z). Do wyliczenia
+niezbędny jest numeryczny model terenu.
 :::
 
 ```{r}
@@ -450,13 +576,41 @@ dist = cumsum(rep(dist, length(elev)))
 ```
 
 ```{r}
-plot(elev / 1000 ~ dist, type = "l", ylim = c(0, 2),
+plot(elev / 1000 ~ dist, type = "l", ylim = c(0, 2), col = "coral4", lwd = 3,
      xlab = "Odległość planarna [km]", ylab = "Wysokość [km n.p.m]")
 ```
 
 **Odległość planarna:** 280 km
 
 **Odległość powierzchniowa:** 283 km
+
+## Powierzchnia poligonów
+
+```{r}
+plot(st_geometry(world), main = "Odwzorowanie walcowe równoodległościowe", axes = TRUE)
+plot(st_geometry(world[world$ADM0_A3 == "GRL", ]), col = "purple", add = TRUE)
+plot(st_geometry(world[world$ADM0_A3 == "COD", ]), col = "blue", add = TRUE)
+```
+
+::: {style="font-size: 75%;"}
+Powierzchnia:
+
+- Grenlandia: 2 166 086 km$^2$
+- Demokratyczna Republika Konga: 2 345 409 km$^2$
+:::
+
+## Powierzchnia poligonów
+
+```{r}
+crs_laea = "+proj=laea +x_0=0 +y_0=0 +lon_0=-10 +lat_0=20"
+world_laea = st_transform(world, crs = crs_laea)
+```
+
+```{r}
+plot(st_geometry(world_laea), main = "Odwzorowanie azymutalne Lamberta")
+plot(st_geometry(world_laea[world_laea$ADM0_A3 == "GRL", ]), col = "purple", add = TRUE)
+plot(st_geometry(world_laea[world_laea$ADM0_A3 == "COD", ]), col = "blue", add = TRUE)
+```
 
 ## Powierzchnia poligonów
 
@@ -478,7 +632,7 @@ area_3035 = units::set_units(area_3035, "km^2")
 
 ```{r}
 plot(area_4326 ~ area_3035, pch = 20, cex = 2,
-     main = "Odwzorowanie azymutalne równopowierzchniowe",
+     main = "Odwzorowanie azymutalne Lamberta",
      xlab = "Powierzchnia planarna", ylab = "Powierzchnia sferyczna")
 abline(1, 1)
 ```
@@ -500,7 +654,7 @@ plot(area_4326 ~ area_mercator, pch = 20, cex = 2,
 abline(1, 1)
 ```
 
-## Rzeczywista wielkość komórek
+## Rzeczywisty rozmiar komórek
 
 ```{r}
 r = rast(xmin = 134000, ymin = 137000, xmax = 865000, ymax = 693000,
@@ -519,4 +673,15 @@ res(r)[1] * res(r)[2]
 plot(cell_size / prod(res(r)), main = "Iloraz powierzchni")
 ```
 
-**Średnia powierzchnia komórek:** 1 000 307 m$^2$
+**Średnia powierzchnia komórek na sferze:** 1 000 307 m$^2$
+
+## Porównanie modeli
+
+|               |            Kartezjański            |      Elipsoidalny     |
+|---------------|:----------------------------------:|:---------------------:|
+| Model Ziemi   |             Płaszczyzna            |       Elipsoida       |
+| Współrzędne   |              Metryczne             |      Geograficzne     |
+| Dokładność    | Umiarkowana (ignorowana krzywizna) |         Wysoka        |
+| Złożoność     |              Mniejsza              |        Większa        |
+| Przeznaczenie |        Mała skala (lokalna)        | Duża skala (globalna) |
+
