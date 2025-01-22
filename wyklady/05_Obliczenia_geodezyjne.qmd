@@ -344,7 +344,9 @@ dms_to_decimal("16°44'08'' E")
 :::
 :::
 
-## Obliczenia {.center style="text-align: center;"}
+## Płaska czy okrągła? {style="text-align: center;" .center}
+
+Wpływ kształtu Ziemi na wyniki analizy przestrzennej
 
 ## Odległość
 
@@ -657,13 +659,19 @@ abline(1, 1)
 ## Rzeczywisty rozmiar komórek
 
 ```{r}
-r = rast(xmin = 134000, ymin = 137000, xmax = 865000, ymax = 693000,
+r = rast(xmin = 150000, ymin = 120000, xmax = 880000, ymax = 810000,
          resolution = 1000, crs = "EPSG:2180")
 cell_size = cellSize(r)
 ```
 
+```{r}
+url = "https://www.gis-support.pl/downloads/2022/polska.zip"
+f = paste0("/vsizip/", "/vsicurl/", url)
+poland = vect(f, what = "geom")
+```
+
 ```r
-r = rast(xmin = 134000, ymin = 137000, xmax = 865000, ymax = 693000,
+r = rast(xmin = 150000, ymin = 120000, xmax = 880000, ymax = 810000,
          resolution = 1000, crs = "EPSG:2180")
 res(r)[1] * res(r)[2]
 #> 1 000 000
@@ -671,6 +679,7 @@ res(r)[1] * res(r)[2]
 
 ```{r}
 plot(cell_size / prod(res(r)), main = "Iloraz powierzchni")
+plot(poland, add = TRUE)
 ```
 
 **Średnia powierzchnia komórek na sferze:** 1 000 307 m$^2$
