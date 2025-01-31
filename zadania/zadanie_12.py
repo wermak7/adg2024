@@ -1,51 +1,63 @@
-# Zadanie 12: Analiza teledetekcyjna
-
 import random
 import numpy as np
-import rasterio
 import matplotlib.pyplot as plt
-from qgis.core import QgsPointXY
+from qgis.core import (
+    QgsPointXY,
+    QgsRasterLayer,
+    QgsRaster,
+    QgsProject
+)
 
-# Ustawienie ziarna dla generatora liczb losowych w celu uzyskania powtarzalnych wyników
+# Ustawienie ziarna dla powtarzalnych wyników
 random.seed(999)
 
-# Generowanie losowych współrzędnych punktów w zakresie od 0 do 1000 z krokiem co 10
+# Generowanie losowych współrzędnych punktów
 x_coordinates = random.choices(range(0, 1000, 10), k=100)
 y_coordinates = random.choices(range(0, 1000, 10), k=100)
 
 # Tworzenie listy obiektów punktowych (QgsPointXY)
 punkty = [QgsPointXY(x, y) for x, y in zip(x_coordinates, y_coordinates)]
 
-# Ścieżki do plików rastrowych (kanałów)
-kanał1_ścieżka = "C:/Users/user/Documents/Landsat_B1.tif"
-kanał2_ścieżka = "C:/Users/user/Documents/Landsat_B2.tif"
+# Ścieżki do plików rastrowych
+kanal1_sciezka = "Landsat_B1.tif"
+kanal2_sciezka = "Landsat_B2.tif"
 
-# Odczyt danych z plików rastrowych za pomocą biblioteki rasterio
-with rasterio.open(kanał1_ścieżka) as źródło1, rasterio.open(kanał2_ścieżka) as źródło2:
-    dane_kanał1 = źródło1.read(1)  # Odczyt pierwszego kanału
-    dane_kanał2 = źródło2.read(1)  # Odczyt drugiego kanału
+# Wczytanie rastrów jako QgsRasterLayer
+kanal1 = QgsRasterLayer(kanal1_sciezka, "Kanał 1")
+kanal2 = QgsRasterLayer(kanal2_sciezka, "Kanał 2")
 
-# Obliczenie różnic pomiędzy pikselami dwóch kanałów
-różnice = dane_kanał1 - dane_kanał2
+if not kanal1.isValid() or not kanal2.isValid():
+    raise ValueError("Nie udało się wczytać plików rastrowych.")
 
-# Obliczenie współczynnika korelacji między dwoma kanałami
-współczynnik_korelacji = np.corrcoef(dane_kanał1.flatten(), dane_kanał2.flatten())[0, 1]
+# Pobranie wartości rastra dla każdego punktu
+def pobierz_wartosc_rastra(layer, point):
+    ident = layer.dataProvider().identify(point, QgsRaster.IdentifyFormatValue)
+    return ident.results()[1] if ident.isValid() else np.nan
 
-# Wizualizacja danych: wykres rozrzutu z linią x = y
+wartosci_kanal1 = [pobierz_wartosc_rastra(kanal1, p) for p in punkty]
+wartosci_kanal2 = [pobierz_wartosc_rastra(kanal2, p) for p in punkty]
+
+# Obliczenie różnic między wartościami kanałów
+diff = np.array(wartosci_kanal1) - np.array(wartosci_kanal2)
+
+# Obliczenie współczynnika korelacji
+wspolczynnik_korelacji = np.corrcoef(wartosci_kanal1, wartosci_kanal2)[0, 1]
+
+# Wizualizacja wykresu rozrzutu
 plt.figure(figsize=(8, 6))
-plt.scatter(dane_kanał1.flatten(), dane_kanał2.flatten(), alpha=0.5, label="Punkty danych")
+plt.scatter(wartosci_kanal1, wartosci_kanal2, alpha=0.5, label="Punkty danych")
 plt.plot(
-    [0, max(dane_kanał1.max(), dane_kanał2.max())],
-    [0, max(dane_kanał1.max(), dane_kanał2.max())],
+    [0, max(max(wartosci_kanal1), max(wartosci_kanal2))],
+    [0, max(max(wartosci_kanal1), max(wartosci_kanal2))],
     color='red', label='Linia x = y'
 )
 plt.xlabel("Wartości pikseli - Kanał 1")
 plt.ylabel("Wartości pikseli - Kanał 2")
 plt.legend()
-plt.title(f"Współczynnik korelacji: {współczynnik_korelacji:.2f}")
+plt.title(f"Współczynnik korelacji: {wspolczynnik_korelacji:.2f}")
 plt.grid()
 plt.show()
 
 # Wyświetlenie statystyk różnic
-print("Średnia różnic pikseli:", np.nanmean(różnice))
-print("Odchylenie standardowe różnic pikseli:", np.nanstd(różnice))
+print("Średnia różnic pikseli:", np.nanmean(diff))
+print("Odchylenie standardowe różnic pikseli:", np.nanstd(diff))
