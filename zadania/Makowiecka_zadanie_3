@@ -1,0 +1,112 @@
+from qgis.core import *
+from qgis.core import QgsVectorLayer
+from qgis.core import QgsProject
+import os
+
+filepath = os.path.join(os.path.expanduser("~"),"Documents", "algorytmy", "dane")
+os.chdir(filepath)
+
+filename = "powiaty.gpkg"
+vector = QgsVectorLayer(filename, "powiaty", "ogr")
+
+print(vector.isValid())
+
+
+from itertools import islice
+
+# iteracja po obiektach
+for feature in vector.getFeatures():
+    # dostęp do atrybutów obiektu
+    attrs = feature.attributes()
+    # dostęp do geometrii obiektu
+    #geom = feature.geometry()
+    print(attrs)
+    # print(geom)
+
+for feature in vector.getFeatures():
+    print(feature.attributes())
+
+for feature in vector.getFeatures():
+    print(feature.geometry().area() / 1000000)
+    
+
+from qgis.core import QgsField
+from qgis.PyQt.QtCore import QVariant
+
+# krok 1 - wlaczenie edycji warstwy
+vector.startEditing()
+
+# krok 2 - stworzenie nowego trybutu
+new_field = [QgsField("pole_km2", QVariant.Type.Double)]
+vector.dataProvider().addAttributes(new_field)
+vector.updateFields()
+
+area_indeks = vector.fields().indexOf("pole_km2")
+print(area_indeks)
+
+#krok 3 - dodanie wartosci do atrybutu 
+for feature in vector.getFeatures():
+    area = feature.geometry().area()
+    area = area / 1000000
+    vector.changeAttributeValue(feature.id(), area_indeks, area)
+
+vector.commitChanges()
+
+QgsProject.instance().addMapLayer(vector)
+
+########
+
+exp = '"pole_km2" > 1000'
+vector.selectByExpression(exp)
+sel = vector.selectedFeatures()
+print(len(sel))
+
+####  NOWA WARSTWA WEKTOROWA ####
+
+# krok 1 - zdefiniowanie nowej warstwy wektorowej
+geo = "polygon"
+crs = "EPSG:2180"
+
+from qgis.core import QgsRectangle
+
+# wybranie obiektów używając prostokąta
+rect = QgsRectangle(340000, 480000, 380000, 520000)
+
+new_layer = QgsVectorLayer(geo+"?crs="+crs, "Nowa warstwa", "memory")
+print(new_layer.isValid())
+
+
+# krok 2 - dodanie atrybutów
+new_layer.startEditing()
+
+fields = [
+    QgsField("ID", QVariant.Int),
+    QgsField("nazwa", QVariant.String),
+    QgsField("wartosc", QVariant.Double)
+]
+
+provider = new_layer.dataProvider()
+provider.addAttributes(fields)
+new_layer.updateFields()
+
+# krok 3 - stworzenie obiektu (geometria + atrybuty)
+from qgis.core import QgsFeature, QgsGeometry
+
+feature = QgsFeature()
+polygon_wkt = QgsGeometry.fromRect(rect).asWkt()
+polygon_geometry = QgsGeometry.fromWkt(polygon_wkt)
+
+# krok 4 - aktualizacja obiektu (geometrii i atrybutów)
+
+feature.setGeometry(polygon_geometry)
+feature.setAttributes([1, "data", 111])
+
+
+# krok 5 - finalizacja zapisu
+new_layer.addFeature(feature)
+new_layer.updateExtents()
+new_layer.commitChanges()
+
+QgsProject.instance().addMapLayer(new_layer)
+
+
